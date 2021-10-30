@@ -19,4 +19,6 @@ public interface ProductService {
 
 	public Boolean updateStock(String prodId, Integer quantity) throws ProductMSException;
 
+	public List<ProductDTO> viewAllProducts() throws ProductMSException;
+
 }

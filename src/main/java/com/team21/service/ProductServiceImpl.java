@@ -118,6 +118,7 @@ public class ProductServiceImpl implements ProductService {
 
 		return productDTO;
 	}
+
 	// Update Stock of Products
 	@Override
 	public Boolean updateStock(String prodId, Integer quantity) throws ProductMSException {
@@ -130,4 +131,23 @@ public class ProductServiceImpl implements ProductService {
 		}
 		return false;
 	}
+
+	// Get all products
+	@Override
+	public List<ProductDTO> viewAllProducts() throws ProductMSException {
+		List<ProductEntity> productEntities = productRepository.findAll();
+
+		if (productEntities.isEmpty())
+			throw new ProductMSException("There are no products to be shown.");
+
+		List<ProductDTO> productDTOs = new ArrayList<>();
+
+		productEntities.forEach(productEntity -> {
+			ProductDTO productDTO = ProductDTO.createDTO(productEntity);
+			productDTOs.add(productDTO);
+		});
+
+		return productDTOs;
+	}
+
 }

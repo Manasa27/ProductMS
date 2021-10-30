@@ -94,4 +94,15 @@ public class ProductController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
 		}
 	}
+
+	// Get all products
+	@GetMapping(value = "/product/viewAll")
+	public ResponseEntity<List<ProductDTO>> viewAllProducts() {
+		try {
+			List<ProductDTO> list = productService.viewAllProducts();
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+		}
+	}
 }
