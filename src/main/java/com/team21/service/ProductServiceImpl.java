@@ -2,6 +2,7 @@ package com.team21.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -105,4 +106,28 @@ public class ProductServiceImpl implements ProductService {
 		return productDTOs;
 	}
 
+	// get product by Id
+	@Override
+	public ProductDTO getProductById(String id) throws ProductMSException {
+		ProductEntity productEntity = productRepository.findByProdId(id);
+
+		if (productEntity == null)
+			throw new ProductMSException("Service.PRODUCT_DOES_NOT_EXISTS");
+
+		ProductDTO productDTO = ProductDTO.createDTO(productEntity);
+
+		return productDTO;
+	}
+	// Update Stock of Products
+	@Override
+	public Boolean updateStock(String prodId, Integer quantity) throws ProductMSException {
+
+		Optional<ProductEntity> optional = productRepository.findById(prodId);
+		ProductEntity product = optional.orElseThrow(() -> new ProductMSException("Product does not exist"));
+		if (product.getStock() >= quantity) {
+			product.setStock(product.getStock() - quantity);
+			return true;
+		}
+		return false;
+	}
 }

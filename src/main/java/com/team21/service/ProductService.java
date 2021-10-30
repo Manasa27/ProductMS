@@ -15,4 +15,8 @@ public interface ProductService {
 
 	public List<ProductDTO> getProductByCategory(String category) throws ProductMSException;
 
+	public ProductDTO getProductById(String id) throws ProductMSException;
+
+	public Boolean updateStock(String prodId, Integer quantity) throws ProductMSException;
+
 }

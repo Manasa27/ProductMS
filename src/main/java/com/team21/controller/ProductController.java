@@ -72,4 +72,26 @@ public class ProductController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
 		}
 	}
+
+	// Get product by IdS
+	@GetMapping(value = "/product/get/Id/{prodId}")
+	public ResponseEntity<ProductDTO> getByProductId(@PathVariable String prodId) {
+		try {
+			ProductDTO productDTO = productService.getProductById(prodId);
+			return new ResponseEntity<>(productDTO, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
+		}
+	}
+
+	// Update Stock of Products
+	@GetMapping(value = "/product/update/stock/{prodId}/{quantity}")
+	public ResponseEntity<Boolean> updateStock(@PathVariable String prodId, @PathVariable Integer quantity) {
+		try {
+			Boolean result = productService.updateStock(prodId, quantity);
+			return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
+		}
+	}
 }
