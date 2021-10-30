@@ -70,4 +70,19 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	// Get product by name
+	@Override
+	public ProductDTO getProductByName(String name) throws ProductMSException {
+		
+		ProductEntity product = productRepository.findByProductName(name);
+		System.out.print(name);
+		if (product == null)
+			throw new ProductMSException("Service.PRODUCT_DOES_NOT_EXISTS");
+
+		ProductDTO productDTO = ProductDTO.createDTO(product);
+
+		return productDTO;
+
+	}
+
 }

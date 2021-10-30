@@ -2,6 +2,8 @@ package com.team21.dto;
 
 import java.util.Objects;
 
+import com.team21.entity.ProductEntity;
+
 public class ProductDTO {
 
 	private String prodId;
@@ -127,4 +129,21 @@ public class ProductDTO {
 				&& Objects.equals(stock, other.stock) && Objects.equals(subCategory, other.subCategory);
 	}
 
+	public static ProductDTO createDTO(ProductEntity product) {
+		
+		ProductDTO productDTO=new ProductDTO();
+		
+		productDTO.setProdId(product.getProdId());
+		productDTO.setCategory(product.getCategory());
+		productDTO.setDescription(product.getDescription());
+		productDTO.setImage(product.getImage());
+		productDTO.setPrice(product.getPrice());
+		productDTO.setProductName(product.getProductName());
+		productDTO.setProductRating(product.getProductRating());
+		productDTO.setSellerId(product.getSellerId());
+		productDTO.setStock(product.getStock());
+		productDTO.setSubCategory(product.getCategory());
+		
+		return productDTO;
+	}
 }
