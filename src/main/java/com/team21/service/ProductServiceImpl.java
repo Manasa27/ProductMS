@@ -24,22 +24,21 @@ public class ProductServiceImpl implements ProductService {
 		productCount = 100;
 	}
 
-	//Adding Product to Application
+	// Adding Product to Application
 	@Override
 	public String addProduct(ProductDTO productDTO) throws ProductMSException {
-		
-		
+
 		ProductEntity productEntity = productRepository.findByProductName(productDTO.getProductName());
-		
-		if(productEntity != null)
+
+		if (productEntity != null)
 			throw new ProductMSException("Service.PRODUCT_ALREADY_EXISTS");
-		
+
 		ProductValidator.validateProduct(productDTO);
-		
+
 		productEntity = new ProductEntity();
-		
-		String id = "PROD"+productCount++;
-		
+
+		String id = "PROD" + productCount++;
+
 		productEntity.setProdId(id);
 		productEntity.setProductName(productDTO.getProductName());
 		productEntity.setPrice(productDTO.getPrice());
@@ -50,11 +49,25 @@ public class ProductServiceImpl implements ProductService {
 		productEntity.setSellerId(productDTO.getSellerId());
 		productEntity.setProductRating(productDTO.getProductRating());
 		productEntity.setStock(productDTO.getStock());
-		
+
 		productRepository.save(productEntity);
-		
+
 		return productEntity.getProdId();
 	}
 
+	// Delete Product from Application
+	@Override
+	public String deleteProduct(String prodId) throws ProductMSException {
+
+		ProductEntity productEntity = productRepository.findByProdId(prodId);
+
+		if (productEntity == null)
+			throw new ProductMSException("Service.CANNOT_DELETE_PRODUCT");
+
+		productRepository.delete(productEntity);
+
+		return "Product deleted successfully!";
+
+	}
 
 }
