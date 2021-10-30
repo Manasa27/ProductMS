@@ -1,5 +1,8 @@
 package com.team21.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,9 +76,8 @@ public class ProductServiceImpl implements ProductService {
 	// Get product by name
 	@Override
 	public ProductDTO getProductByName(String name) throws ProductMSException {
-		
+
 		ProductEntity product = productRepository.findByProductName(name);
-		System.out.print(name);
 		if (product == null)
 			throw new ProductMSException("Service.PRODUCT_DOES_NOT_EXISTS");
 
@@ -83,6 +85,24 @@ public class ProductServiceImpl implements ProductService {
 
 		return productDTO;
 
+	}
+
+	// Get product by category
+	@Override
+	public List<ProductDTO> getProductByCategory(String category) throws ProductMSException {
+		List<ProductEntity> productEntities = productRepository.findByCategory(category);
+
+		if (productEntities.isEmpty())
+			throw new ProductMSException("Service.CATEGORY_ERROR");
+
+		List<ProductDTO> productDTOs = new ArrayList<>();
+
+		for (ProductEntity product : productEntities) {
+			ProductDTO productDTO = ProductDTO.createDTO(product);
+
+			productDTOs.add(productDTO);
+		}
+		return productDTOs;
 	}
 
 }

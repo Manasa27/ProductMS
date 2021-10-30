@@ -1,6 +1,6 @@
-drop database if exists prod_db;
-create database prod_db;
-use prod_db;
+drop database if exists product_db;
+create database product_db;
+use product_db;
 
 create table product (
 prod_id varchar(30) not null,

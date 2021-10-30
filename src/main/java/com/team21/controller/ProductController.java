@@ -1,5 +1,7 @@
 package com.team21.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -56,7 +58,18 @@ public class ProductController {
 			ProductDTO productDTO = productService.getProductByName(name);
 			return new ResponseEntity<>(productDTO, HttpStatus.OK);
 		} catch (Exception e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
+		}
+	}
+
+	// Get product by category
+	@GetMapping(value = "/product/get/category/{category}")
+	public ResponseEntity<List<ProductDTO>> getByProductCategory(@PathVariable String category) {
+		try {
+			List<ProductDTO> productDTO = productService.getProductByCategory(category);
+			return new ResponseEntity<List<ProductDTO>>(productDTO, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
 		}
 	}
 }
