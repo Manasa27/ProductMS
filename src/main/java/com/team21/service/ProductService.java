@@ -29,4 +29,6 @@ public interface ProductService {
 
 	public SubscribedProductDTO getSubscriptionDetails(String buyerId, String prodId) throws ProductMSException;
 
+	public void deleteSellerProducts(String sellerId) throws ProductMSException ;
+
 }

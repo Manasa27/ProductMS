@@ -60,6 +60,18 @@ public class ProductController {
 		}
 	}
 
+	// Delete all products by specific seller
+	@DeleteMapping(value = "products/seller/delete/{sellerId}")
+	public ResponseEntity<String> deleteSellerProducts(@PathVariable String sellerId) {
+		try {
+			productService.deleteSellerProducts(sellerId);
+			String result = "Product stock removed successfully";
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+		}
+	}
+
 	// Get product by name
 	@GetMapping(value = "/product/get/name/{name}")
 	public ResponseEntity<ProductDTO> getByProductName(@PathVariable String name) {
@@ -128,6 +140,7 @@ public class ProductController {
 		}
 	}
 
+	// Adding Subscription for buyer
 	@PostMapping(value = "/product/subscriptions/add/", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addSubscription(@RequestBody SubscribedProductDTO subscribedProductDTO) {
 		try {
@@ -141,6 +154,7 @@ public class ProductController {
 
 	}
 
+	// get specific subscription details
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@GetMapping(value = "/product/subscriptions/get/{buyerId}/{prodId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SubscribedProductDTO> getSpecificSubscription(@PathVariable String buyerId,
@@ -150,7 +164,7 @@ public class ProductController {
 			return new ResponseEntity<SubscribedProductDTO>(s, HttpStatus.OK);
 
 		} catch (Exception e) {
-			return new ResponseEntity(environment.getProperty(e.getMessage()),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity(environment.getProperty(e.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 
 	}

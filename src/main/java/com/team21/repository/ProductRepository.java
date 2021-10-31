@@ -15,5 +15,7 @@ public interface ProductRepository extends CrudRepository<ProductEntity, String>
 	public List<ProductEntity> findByCategory(String category);
 
 	public List<ProductEntity> findAll();
+	
+    public List<ProductEntity> findAllBysellerId(String sellerId);
 
 }

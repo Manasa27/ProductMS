@@ -82,6 +82,19 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	// Delete all products by specific seller
+	@Override
+	public void deleteSellerProducts(String sellerId) throws ProductMSException{
+		List<ProductEntity> productList = productRepository.findAllBysellerId(sellerId);
+		if (!productList.isEmpty()) {
+			for (ProductEntity pro : productList) {
+				productRepository.delete(pro);
+			}
+		} else {
+			throw new ProductMSException("No product found with the given seller id");
+		}
+	}
+
 	// Get product by name
 	@Override
 	public ProductDTO getProductByName(String name) throws ProductMSException {
