@@ -119,9 +119,9 @@ public class ProductServiceImpl implements ProductService {
 		return productDTO;
 	}
 
-	// Update Stock of Products
+	// Reduce Stock after ordering of Products
 	@Override
-	public Boolean updateStock(String prodId, Integer quantity) throws ProductMSException {
+	public Boolean reduceStock(String prodId, Integer quantity) throws ProductMSException {
 
 		Optional<ProductEntity> optional = productRepository.findById(prodId);
 		ProductEntity product = optional.orElseThrow(() -> new ProductMSException("Product does not exist"));
@@ -130,6 +130,22 @@ public class ProductServiceImpl implements ProductService {
 			return true;
 		}
 		return false;
+	}
+
+	// Update stock when seller increases stock
+	@Override
+	public Boolean updateStock(ProductDTO productDTO) throws ProductMSException {
+		Optional<ProductEntity> optional = productRepository.findById(productDTO.getProdId());
+		if (optional.isPresent() == true) {
+			if (ProductValidator.validateStock(productDTO.getStock()) == true) {
+				optional.get().setStock(productDTO.getStock());
+				productRepository.save(optional.get());
+				return true;
+			} else
+				throw new ProductMSException(
+						"Invalid stock value! Minimun stock must be 10");
+		} else
+			throw new ProductMSException("No such Product found!!");
 	}
 
 	// Get all products

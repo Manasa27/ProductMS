@@ -5,11 +5,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -84,14 +86,27 @@ public class ProductController {
 		}
 	}
 
-	// Update Stock of Products
-	@GetMapping(value = "/product/update/stock/{prodId}/{quantity}")
-	public ResponseEntity<Boolean> updateStock(@PathVariable String prodId, @PathVariable Integer quantity) {
+	// Reduce Stock after ordering of Products
+	@GetMapping(value = "/product/reduce/stock/{prodId}/{quantity}")
+	public ResponseEntity<Boolean> reduceStock(@PathVariable String prodId, @PathVariable Integer quantity) {
 		try {
-			Boolean result = productService.updateStock(prodId, quantity);
+			Boolean result = productService.reduceStock(prodId, quantity);
 			return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
+		}
+	}
+
+	// Update stock when seller increases stock
+	@PutMapping(value = "/product/update/stock", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updateStock(@RequestBody ProductDTO productDTO) {
+		try {
+			if (productService.updateStock(productDTO)) {
+				return new ResponseEntity<String>("Stock updated successfully!", HttpStatus.OK);
+			} else
+				throw new Exception("Stock cannot be updated!");
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 
