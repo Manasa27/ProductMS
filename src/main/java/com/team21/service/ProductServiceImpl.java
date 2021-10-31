@@ -178,7 +178,7 @@ public class ProductServiceImpl implements ProductService {
 	public String addSubscrption(SubscribedProductDTO subscribedProductDTO, BuyerDTO buyerDTO)
 			throws ProductMSException {
 
-		if (buyerDTO.getIsPrivileged() == "true") {
+		if (buyerDTO.getIsPrivileged().equals("True")) {
 			SubscribedProductEntity subscribedEntities = new SubscribedProductEntity();
 			CompositeKey key = new CompositeKey(subscribedProductDTO.getBuyerId(), subscribedProductDTO.getProdId());
 
@@ -189,6 +189,28 @@ public class ProductServiceImpl implements ProductService {
 		}
 		throw new ProductMSException("SERVICE.FAILED_SUBSCRIPTION");
 
+	}
+
+	// get specific subscription details
+	@Override
+	public SubscribedProductDTO getSubscriptionDetails(String buyerId, String prodId) throws ProductMSException {
+		CompositeKey key = new CompositeKey(buyerId, prodId);
+
+		Optional<SubscribedProductEntity> optional = subscribedRepository.findById(key);
+		SubscribedProductDTO subscribedproductDTO = null;
+		if (optional.isPresent()) {
+			SubscribedProductEntity subscribedProduct = optional.get();
+			CompositeKey keyFromRepository = subscribedProduct.getCompositeId();
+			subscribedproductDTO = new SubscribedProductDTO();
+
+			subscribedproductDTO.setBuyerId(keyFromRepository.getBuyerId());
+			subscribedproductDTO.setProdId(keyFromRepository.getProdId());
+			subscribedproductDTO.setQuantity(subscribedProduct.getQuantity());
+
+			return subscribedproductDTO;
+		} else {
+			throw new ProductMSException("SERVICE.SUBSCRIPTION_NOT_FOUND");
+		}
 	}
 
 }

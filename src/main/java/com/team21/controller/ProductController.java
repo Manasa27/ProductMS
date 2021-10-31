@@ -140,4 +140,18 @@ public class ProductController {
 		}
 
 	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@GetMapping(value = "/product/subscriptions/get/{buyerId}/{prodId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SubscribedProductDTO> getSpecificSubscription(@PathVariable String buyerId,
+			@PathVariable String prodId) {
+		try {
+			SubscribedProductDTO s = productService.getSubscriptionDetails(buyerId, prodId);
+			return new ResponseEntity<SubscribedProductDTO>(s, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity(environment.getProperty(e.getMessage()),HttpStatus.BAD_REQUEST);
+		}
+
+	}
 }

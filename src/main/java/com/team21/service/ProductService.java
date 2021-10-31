@@ -27,4 +27,6 @@ public interface ProductService {
 	
 	public String addSubscrption(SubscribedProductDTO subscribedProductDTO, BuyerDTO buyerDTO) throws ProductMSException;
 
+	public SubscribedProductDTO getSubscriptionDetails(String buyerId, String prodId) throws ProductMSException;
+
 }
