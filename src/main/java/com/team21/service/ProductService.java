@@ -2,7 +2,9 @@ package com.team21.service;
 
 import java.util.List;
 
+import com.team21.dto.BuyerDTO;
 import com.team21.dto.ProductDTO;
+import com.team21.dto.SubscribedProductDTO;
 import com.team21.exception.ProductMSException;
 
 public interface ProductService {
@@ -22,5 +24,7 @@ public interface ProductService {
 	public Boolean updateStock(ProductDTO productDTO) throws ProductMSException;
 
 	public List<ProductDTO> viewAllProducts() throws ProductMSException;
+	
+	public String addSubscrption(SubscribedProductDTO subscribedProductDTO, BuyerDTO buyerDTO) throws ProductMSException;
 
 }

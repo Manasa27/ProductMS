@@ -9,10 +9,15 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.team21.dto.BuyerDTO;
 import com.team21.dto.ProductDTO;
+import com.team21.dto.SubscribedProductDTO;
 import com.team21.entity.ProductEntity;
+import com.team21.entity.SubscribedProductEntity;
 import com.team21.exception.ProductMSException;
 import com.team21.repository.ProductRepository;
+import com.team21.repository.SubscribedProductRepository;
+import com.team21.utility.CompositeKey;
 import com.team21.validator.ProductValidator;
 
 @Transactional
@@ -21,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
+
+	@Autowired
+	private SubscribedProductRepository subscribedRepository;
 
 	private static int productCount;
 
@@ -142,8 +150,7 @@ public class ProductServiceImpl implements ProductService {
 				productRepository.save(optional.get());
 				return true;
 			} else
-				throw new ProductMSException(
-						"Invalid stock value! Minimun stock must be 10");
+				throw new ProductMSException("Invalid stock value! Minimun stock must be 10");
 		} else
 			throw new ProductMSException("No such Product found!!");
 	}
@@ -164,6 +171,24 @@ public class ProductServiceImpl implements ProductService {
 		});
 
 		return productDTOs;
+	}
+
+	// Adding Subscription for buyer
+	@Override
+	public String addSubscrption(SubscribedProductDTO subscribedProductDTO, BuyerDTO buyerDTO)
+			throws ProductMSException {
+
+		if (buyerDTO.getIsPrivileged() == "true") {
+			SubscribedProductEntity subscribedEntities = new SubscribedProductEntity();
+			CompositeKey key = new CompositeKey(subscribedProductDTO.getBuyerId(), subscribedProductDTO.getProdId());
+
+			subscribedEntities.setCompositeId(key);
+			subscribedEntities.setQuantity(subscribedProductDTO.getQuantity());
+			subscribedRepository.save(subscribedEntities);
+			return "Subscription added successfully!";
+		}
+		throw new ProductMSException("SERVICE.FAILED_SUBSCRIPTION");
+
 	}
 
 }

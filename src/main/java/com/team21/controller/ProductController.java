@@ -3,6 +3,7 @@ package com.team21.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.team21.dto.BuyerDTO;
 import com.team21.dto.ProductDTO;
+import com.team21.dto.SubscribedProductDTO;
 import com.team21.service.ProductService;
 
 @RestController
@@ -27,6 +31,9 @@ public class ProductController {
 
 	@Autowired
 	private Environment environment;
+
+	@Value("${user.uri}")
+	String userUri;
 
 	// Add Product in Application
 	@PostMapping(value = "/product/add")
@@ -119,5 +126,18 @@ public class ProductController {
 		} catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
 		}
+	}
+
+	@PostMapping(value = "/product/subscriptions/add/", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> addSubscription(@RequestBody SubscribedProductDTO subscribedProductDTO) {
+		try {
+			BuyerDTO buyerDTO = new RestTemplate()
+					.getForObject(userUri + "userMS/buyer/" + subscribedProductDTO.getBuyerId(), BuyerDTO.class);
+			String result = productService.addSubscrption(subscribedProductDTO, buyerDTO);
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(environment.getProperty(e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
+
 	}
 }
