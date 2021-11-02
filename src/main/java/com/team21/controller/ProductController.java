@@ -68,7 +68,7 @@ public class ProductController {
 			String result = "Product stock removed successfully";
 			return new ResponseEntity<String>(result, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
 		}
 	}
 
