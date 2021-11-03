@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.team21.dto.BuyerDTO;
 import com.team21.dto.ProductDTO;
 import com.team21.dto.SubscribedProductDTO;
+import com.team21.exception.ProductMSException;
 import com.team21.service.ProductService;
 
 @RestController
@@ -36,14 +37,14 @@ public class ProductController {
 	String userUri;
 
 	// Add Product in Application
-	@PostMapping(value = "/product/add")
-	public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
+	@PostMapping(value = "/product/add", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) throws ProductMSException {
 
 		try {
 			String result = productService.addProduct(productDTO);
 			return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(environment.getProperty(e.getMessage()), HttpStatus.UNAUTHORIZED);
+		} catch (ProductMSException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, environment.getProperty(e.getMessage()), e);
 		}
 
 	}
