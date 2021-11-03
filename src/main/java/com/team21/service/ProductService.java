@@ -21,7 +21,7 @@ public interface ProductService {
 
 	public Boolean reduceStock(String prodId, Integer quantity) throws ProductMSException;
 
-	public Boolean updateStock(ProductDTO productDTO) throws ProductMSException;
+	public Boolean updateStock(String productId, Integer quantity) throws ProductMSException;
 
 	public List<ProductDTO> viewAllProducts() throws ProductMSException;
 

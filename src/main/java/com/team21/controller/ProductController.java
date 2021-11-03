@@ -128,10 +128,10 @@ public class ProductController {
 	}
 
 	// Update stock when seller increases stock
-	@PutMapping(value = "/product/update/stock", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> updateStock(@RequestBody ProductDTO productDTO) {
+	@PutMapping(value = "/product/update/stock/{productId}/{quantity}")
+	public ResponseEntity<String> updateStock(@PathVariable String productId, @PathVariable Integer quantity) {
 		try {
-			if (productService.updateStock(productDTO)) {
+			if (productService.updateStock(productId,quantity)) {
 				return new ResponseEntity<String>("Stock updated successfully!", HttpStatus.OK);
 			} else
 				throw new Exception("Stock cannot be updated!");

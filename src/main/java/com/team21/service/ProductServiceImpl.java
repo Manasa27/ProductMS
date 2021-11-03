@@ -169,15 +169,15 @@ public class ProductServiceImpl implements ProductService {
 
 	// Update stock when seller increases stock
 	@Override
-	public Boolean updateStock(ProductDTO productDTO) throws ProductMSException {
-		Optional<ProductEntity> optional = productRepository.findById(productDTO.getProdId());
+	public Boolean updateStock(String productId, Integer quantity) throws ProductMSException {
+		Optional<ProductEntity> optional = productRepository.findById(productId);
 		if (optional.isPresent() == true) {
-			if (ProductValidator.validateStock(productDTO.getStock()) == true) {
-				optional.get().setStock(productDTO.getStock());
+			if (ProductValidator.validateStock(quantity) == true) {
+				optional.get().setStock(quantity);
 				productRepository.save(optional.get());
 				return true;
 			} else
-				throw new ProductMSException("Invalid stock value! Minimun stock must be 10");
+				throw new ProductMSException("Invalid stock value! Minimun stock must be 10.");
 		} else
 			throw new ProductMSException("No such Product found!!");
 	}
