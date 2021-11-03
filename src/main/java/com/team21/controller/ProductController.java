@@ -60,6 +60,17 @@ public class ProductController {
 		}
 	}
 
+	// deletion of all products when sellerId is deactivated
+	@GetMapping(value = "/product/deleteAll/{sellerId}")
+	public ResponseEntity<String> deleteAllProductsofSeller(@PathVariable String sellerId) {
+		try {
+			String result = productService.deleteProductofDeactiveSeller(sellerId);
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, environment.getProperty(e.getMessage()), e);
+		}
+	}
+
 	// Delete all products by specific seller
 	@DeleteMapping(value = "products/seller/delete/{sellerId}")
 	public ResponseEntity<String> deleteSellerProducts(@PathVariable String sellerId) {

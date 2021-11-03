@@ -24,11 +24,14 @@ public interface ProductService {
 	public Boolean updateStock(ProductDTO productDTO) throws ProductMSException;
 
 	public List<ProductDTO> viewAllProducts() throws ProductMSException;
-	
-	public String addSubscrption(SubscribedProductDTO subscribedProductDTO, BuyerDTO buyerDTO) throws ProductMSException;
+
+	public String addSubscrption(SubscribedProductDTO subscribedProductDTO, BuyerDTO buyerDTO)
+			throws ProductMSException;
 
 	public SubscribedProductDTO getSubscriptionDetails(String buyerId, String prodId) throws ProductMSException;
 
-	public void deleteSellerProducts(String sellerId) throws ProductMSException ;
+	public void deleteSellerProducts(String sellerId) throws ProductMSException;
+
+	public String deleteProductofDeactiveSeller(String sellerId) throws ProductMSException;
 
 }

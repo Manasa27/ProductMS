@@ -82,9 +82,23 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	// Delete All products of a specific seller when id is deactivated
+	@Override
+	public String deleteProductofDeactiveSeller(String sellerId) throws ProductMSException {
+
+		List<ProductEntity> productList = productRepository.findAllBysellerId(sellerId);
+		if (productList.isEmpty())
+			throw new ProductMSException("Service.NO_PRODUCTS_FOR_THIS_SELLER_FOUND");
+
+		productRepository.deleteAll(productList);
+
+		return "Products of deactivated seller deleted successfully";
+
+	}
+
 	// Delete all products by specific seller
 	@Override
-	public void deleteSellerProducts(String sellerId) throws ProductMSException{
+	public void deleteSellerProducts(String sellerId) throws ProductMSException {
 		List<ProductEntity> productList = productRepository.findAllBysellerId(sellerId);
 		if (!productList.isEmpty()) {
 			for (ProductEntity pro : productList) {
