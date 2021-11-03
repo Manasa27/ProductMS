@@ -61,7 +61,7 @@ public class ProductController {
 	}
 
 	// deletion of all products when sellerId is deactivated
-	@GetMapping(value = "/product/deleteAll/{sellerId}")
+	@DeleteMapping(value = "/product/deleteAll/{sellerId}")
 	public ResponseEntity<String> deleteAllProductsofSeller(@PathVariable String sellerId) {
 		try {
 			String result = productService.deleteProductofDeactiveSeller(sellerId);
