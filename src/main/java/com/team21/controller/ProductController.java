@@ -38,13 +38,13 @@ public class ProductController {
 
 	// Add Product in Application
 	@PostMapping(value = "/product/add", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) throws ProductMSException {
-
+	public ResponseEntity<String> addProduct(@RequestBody ProductDTO productDTO) {
 		try {
 			String result = productService.addProduct(productDTO);
-			return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+			return new ResponseEntity<>("Your product is successfully added with product ID: " + result,
+					HttpStatus.ACCEPTED);
 		} catch (ProductMSException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, environment.getProperty(e.getMessage()), e);
+			return new ResponseEntity<>(environment.getProperty(e.getMessage()), HttpStatus.ALREADY_REPORTED);
 		}
 
 	}
@@ -74,7 +74,7 @@ public class ProductController {
 
 	// Delete all products by specific seller
 	@DeleteMapping(value = "products/seller/delete/{sellerId}")
-	public ResponseEntity<String> deleteSellerProducts(@PathVariable String sellerId) {
+	public ResponseEntity<String> deleteSellerProducts(@PathVariable String sellerId) throws ResponseStatusException {
 		try {
 			productService.deleteSellerProducts(sellerId);
 			String result = "Product stock removed successfully";
@@ -132,7 +132,7 @@ public class ProductController {
 	@PutMapping(value = "/product/update/stock/{productId}/{quantity}")
 	public ResponseEntity<String> updateStock(@PathVariable String productId, @PathVariable Integer quantity) {
 		try {
-			if (productService.updateStock(productId,quantity)) {
+			if (productService.updateStock(productId, quantity)) {
 				return new ResponseEntity<String>("Stock updated successfully!", HttpStatus.OK);
 			} else
 				throw new Exception("Stock cannot be updated!");

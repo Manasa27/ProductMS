@@ -32,6 +32,6 @@ public interface ProductService {
 
 	public void deleteSellerProducts(String sellerId) throws ProductMSException;
 
-	public String deleteProductofDeactiveSeller(String sellerId) throws ProductMSException;
+	public String deleteProductofDeactiveSeller(String sellerId);
 
 }
